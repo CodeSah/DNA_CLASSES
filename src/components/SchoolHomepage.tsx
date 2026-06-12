@@ -22,6 +22,8 @@ import { Announcement } from '../types';
 const campusImg = "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200";
 const libraryImg = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200";
 const dnaLabImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=1200";
+const digitalLearnImg = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200";
+const chemistryLabImg = "https://images.unsplash.com/photo-1517817748493-49ec54a32465?auto=format&fit=crop&q=80&w=1200";
 
 interface SchoolHomepageProps {
   onNavigate: (tab: 'home' | 'student' | 'teacher') => void;
@@ -57,6 +59,22 @@ export default function SchoolHomepage({ onNavigate, announcements }: SchoolHome
       image: dnaLabImg,
       badge: "DIRECTED BY AATISH SAH",
       cta: "Check Candidate Report Card"
+    },
+    {
+      title: "Interactive & Smart Audio-Visual Classrooms",
+      subtitle: "Modern Visual Teaching & Concept Mapping Lectures",
+      description: "We employ interactive state-of-the-art projection boards and high quality digital presentations to break down complex molecular, spatial, and geometrical formulas easily.",
+      image: digitalLearnImg,
+      badge: "AUDIO-VISUAL DIGITAL SUITE",
+      cta: "Explore Study Worksheets"
+    },
+    {
+      title: "Practical Chemistry & Biological Science Labs",
+      subtitle: "Hands-on Scientific Demonstrations & Weekly Experiential Sessions",
+      description: "Supplementing textbook theory with real practical experiments, laboratory simulations, and safe demonstrations in our state-certified educational workspace.",
+      image: chemistryLabImg,
+      badge: "PRACTICAL EXPERIMENTAL LABS",
+      cta: "Check Lab Schedules"
     }
   ];
 
