@@ -409,15 +409,6 @@ export default function App() {
               >
                 {isDarkMode ? '☀ Light View' : '🌙 Dark View'}
               </button>
-
-              <button
-                onClick={handleResetToSeeds}
-                className="flex items-center gap-1 text-[#028A60] hover:text-[#02A875] transition-colors py-1 cursor-pointer font-bold uppercase text-[10px]"
-                title="Wipe database changes and reseed samples"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Reset DB Seed Samples
-              </button>
             </div>
           </div>
 
