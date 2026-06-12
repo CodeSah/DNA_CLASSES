@@ -131,8 +131,8 @@ export default function AnnouncementsBanner({ announcements }: AnnouncementsBann
           </div>
 
           <div id="banner-controls" className="flex items-center space-x-3 shrink-0 ml-4 font-mono text-xs">
-            <span className="text-slate-500 hidden sm:inline mr-2 uppercase tracking-tight">
-              📅 {current.date}
+            <span className="text-slate-500 hidden sm:inline mr-2 uppercase tracking-tight font-semibold" title="Current Day Calendar Standard">
+              📅 {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
             
             <button 

@@ -272,9 +272,6 @@ export default function App() {
               }`}>
                 Janakpur-11, Kishori Nagar • Directed by Aatish Sah • "Your Education in DNA"
               </p>
-              <p className="text-[10px] uppercase tracking-widest text-[#028A60] dark:text-[#02A875] font-mono mt-1 font-bold select-none">
-                ★ Made by Khushi Kumari Sah ★
-              </p>
             </div>
           </div>
 
@@ -538,7 +535,7 @@ export default function App() {
             Engineered with React 19 + Tailwind CSS + full device emulator mock system. Certified secure sandbox server.
           </p>
           <p className="mt-3 text-[#028A60] dark:text-[#02A875] font-bold text-[10px] tracking-widest uppercase">
-            ★ Made by Khushi Kumari Sah ★
+            ★ DEVELOPED BY KHUSHI KUMARI SAH ★
           </p>
         </div>
       </footer>

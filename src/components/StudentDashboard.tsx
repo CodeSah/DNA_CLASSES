@@ -231,26 +231,12 @@ export default function StudentDashboard({
 
     setPrintStatusText(`Assembling ${reportTypeName}... If the print dialog is blocked, please click "Open in New Tab" at the top right of the screen.`);
 
-    // Create a temporary hidden iframe if it doesn't already exist
-    let iframe = document.getElementById('print-iframe') as HTMLIFrameElement;
-    if (!iframe) {
-      iframe = document.createElement('iframe');
-      iframe.id = 'print-iframe';
-      iframe.src = 'about:blank';
-      iframe.style.position = 'absolute';
-      iframe.style.left = '-9999px';
-      iframe.style.top = '-9999px';
-      iframe.style.width = '1024px';
-      iframe.style.height = '768px';
-      iframe.style.opacity = '0.01';
-      iframe.style.border = '0';
-      document.body.appendChild(iframe);
-    }
-
-    const doc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!doc) {
-      console.error("Could not obtain iframe document for printing");
-      return;
+    // Create or select the direct print layout div outside #root
+    let printLayout = document.getElementById('direct-print-layout');
+    if (!printLayout) {
+      printLayout = document.createElement('div');
+      printLayout.id = 'direct-print-layout';
+      document.body.appendChild(printLayout);
     }
 
     // Prepare subject row items dynamically filtering based on reportType
@@ -296,215 +282,194 @@ export default function StudentDashboard({
       : `<tr><td colspan="7" style="text-align: center; padding: 20px; font-style: italic; color: #777;">No active evaluation marks found matching this filter.</td></tr>`;
 
     const printHtmlContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>DNA Academy Academic Statement - ${activeStudent.name}</title>
-          <style>
-            @page {
-              size: A4 portrait;
-              margin: 15mm;
-            }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-              padding: 0;
-              margin: 0;
-              background-color: #ffffff;
-              color: #111111;
-              line-height: 1.4;
-              font-size: 13px;
-            }
-            .header-container {
-              text-align: center;
-              border-bottom: 2px solid #028A60;
-              padding-bottom: 12px;
-              margin-bottom: 20px;
-            }
-            .header-title {
-              margin: 0;
-              font-size: 24px;
-              font-style: italic;
-              font-family: serif;
-              font-weight: 900;
-              color: #028A60;
-            }
-            .header-subtitle {
-              margin: 4px 0 0;
-              font-size: 10px;
-              letter-spacing: 2px;
-              font-weight: bold;
-              text-transform: uppercase;
-              color: #444;
-            }
-            .header-meta {
-              margin: 2px 0 0;
-              font-size: 11px;
-              color: #666;
-            }
-            .info-grid {
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 20px;
-              margin-bottom: 25px;
-              border: 1px solid #eee;
-              padding: 12px;
-              background-color: #fafafa;
-            }
-            .info-item {
-              margin: 4px 0;
-            }
-            table {
-              width: 100%;
-              border-collapse: collapse;
-              margin-top: 15px;
-              margin-bottom: 20px;
-            }
-            th {
-              background-color: #028A60;
-              color: #ffffff;
-              font-weight: bold;
-              padding: 8px 10px;
-              font-size: 11px;
-              text-transform: uppercase;
-              letter-spacing: 0.5px;
-              border: 1px solid #016f4d;
-              text-align: left;
-            }
-            td {
-              padding: 6px 10px;
-              border: 1px solid #ddd;
-              font-size: 12px;
-            }
-            .text-center {
-              text-align: center;
-            }
-            .font-bold {
-              font-weight: bold;
-            }
-            .remarks-box {
-              margin-top: 20px;
-              background-color: #f4faf7;
-              padding: 12px 16px;
-              border-left: 4px solid #028A60;
-              border-top: 1px solid #e1f0e9;
-              border-bottom: 1px solid #e1f0e9;
-              border-right: 1px solid #e1f0e9;
-            }
-            .remarks-title {
-              margin: 0 0 4px;
-              font-weight: bold;
-              text-transform: uppercase;
-              font-size: 10px;
-              letter-spacing: 1px;
-              color: #028A60;
-            }
-            .remarks-text {
-              margin: 0;
-              font-style: italic;
-              color: #333;
-            }
-            .sign-container {
-              display: flex;
-              justify-content: space-between;
-              margin-top: 60px;
-            }
-            .sign-line {
-              border-top: 1px solid #666;
-              width: 180px;
-              text-align: center;
-              padding-top: 6px;
-              font-size: 11px;
-              font-weight: bold;
-              color: #444;
-            }
-            .footer-info {
-              margin-top: 40px;
-              text-align: center;
-              font-size: 9px;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              color: #888;
-              border-top: 1px solid #eee;
-              padding-top: 12px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="header-container">
-            <h1 class="header-title">DEV NARAYAN ACADEMY</h1>
-            <p class="header-subtitle">Your Education in DNA &bull; Coaching Centre Janakpur-11</p>
-            <p class="header-meta">Est: 2080 B.S. | Director: Aatish Sah</p>
-          </div>
+      <style>
+        @media print {
+          /* Hide standard screen workspace */
+          #root, .toast, .no-print {
+            display: none !important;
+          }
+          #direct-print-layout {
+            display: block !important;
+            background: white !important;
+            color: black !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+        }
+        @media screen {
+          #direct-print-layout {
+            display: none !important;
+          }
+        }
+        
+        /* High definition portrait page constraints */
+        .print-page-container {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+          color: #111111;
+          line-height: 1.35;
+          font-size: 11px;
+          padding: 8mm;
+          background: #ffffff;
+          box-sizing: border-box;
+          text-align: left;
+        }
+        .header-container {
+          text-align: center;
+          border-bottom: 2px solid #028A60;
+          padding-bottom: 6px;
+          margin-bottom: 12px;
+        }
+        .header-title {
+          margin: 0;
+          font-size: 20px;
+          font-style: italic;
+          font-family: serif;
+          font-weight: 900;
+          color: #028A60;
+        }
+        .header-subtitle {
+          margin: 2px 0 0;
+          font-size: 9px;
+          letter-spacing: 1.5px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #444;
+        }
+        .header-meta {
+          margin: 1px 0 0;
+          font-size: 10px;
+          color: #666;
+        }
+        .info-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 15px;
+          border: 1px solid #eee;
+          padding: 8px 12px;
+          background-color: #fafafa;
+        }
+        .info-item {
+          margin: 2px 0;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          margin-bottom: 12px;
+        }
+        th {
+          background-color: #028A60;
+          color: #ffffff;
+          font-weight: bold;
+          padding: 6px 8px;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border: 1px solid #016f4d;
+          text-align: left;
+        }
+        td {
+          padding: 4px 8px;
+          border: 1px solid #ddd;
+          font-size:  10.5px;
+        }
+        .text-center {
+          text-align: center;
+        }
+        .font-bold {
+          font-weight: bold;
+        }
+        .sign-container {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 35px;
+        }
+        .sign-line {
+          border-top: 1px solid #666;
+          width: 150px;
+          text-align: center;
+          padding-top: 4px;
+          font-size: 10.5px;
+          font-weight: bold;
+          color: #444;
+        }
+        .footer-info {
+          margin-top: 25px;
+          text-align: center;
+          font-size: 8.5px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: #888;
+          border-top: 1px solid #eee;
+          padding-top: 8px;
+        }
+      </style>
+      <div class="print-page-container">
+        <div class="header-container">
+          <h1 class="header-title">DEV NARAYAN ACADEMY</h1>
+          <p class="header-subtitle">Your Education in DNA &bull; Coaching Centre Janakpur-11</p>
+          <p class="header-meta">Est: 2080 B.S. | Director: Aatish Sah</p>
+        </div>
 
-          <div class="info-grid">
-            <div>
-              <div class="info-item"><strong>Student Name:</strong> ${activeStudent.name}</div>
-              <div class="info-item"><strong>Enrollment Number:</strong> ${activeStudent.id}</div>
-              <div class="info-item"><strong>Portal Username:</strong> ${activeStudent.username}</div>
-            </div>
-            <div>
-              <div class="info-item"><strong>Academic Level:</strong> ${activeStudent.gradeClass}</div>
-              <div class="info-item"><strong>Attendance Register:</strong> ${attPercentage}% Present</div>
-              <div class="info-item"><strong>Statement Date:</strong> ${new Date().toISOString().split('T')[0]}</div>
-            </div>
+        <div class="info-grid">
+          <div>
+            <div class="info-item"><strong>Student Name:</strong> ${activeStudent.name}</div>
+            <div class="info-item"><strong>Enrollment Number:</strong> ${activeStudent.id}</div>
+            <div class="info-item"><strong>Portal Username:</strong> ${activeStudent.username}</div>
           </div>
-
-          <h3 style="margin: 20px 0 8px; text-transform: uppercase; font-size: 12px; border-bottom: 2px solid #028A60; padding-bottom: 4px; color: #028A60; letter-spacing: 0.5px; font-weight: bold;">
-            ${reportHeadline}
-          </h3>
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 25%;">Subject</th>
-                <th style="width: 20%;">Exam Type</th>
-                <th style="width: 10%; text-align: center;">Max</th>
-                <th style="width: 10%; text-align: center;">Pass</th>
-                <th style="width: 10%; text-align: center;">Obtained</th>
-                <th style="width: 10%; text-align: center;">Status</th>
-                <th style="width: 15%;">Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${cleanSubjectRows}
-            </tbody>
-          </table>
-
-          <div class="remarks-box">
-            <p class="remarks-title">${reportType === 'recent' ? 'Recent Progress Appraisals' : 'Comprehensive Appraisals &amp; Development Report'}</p>
-            <p class="remarks-text">"${activeStudent.generalRemarks || 'Pupil displays positive behavior, cooperative classroom citizenship, and steady effort in exam preparation.'}"</p>
+          <div>
+            <div class="info-item"><strong>Academic Level:</strong> ${activeStudent.gradeClass}</div>
+            <div class="info-item"><strong>Attendance Register:</strong> ${attPercentage}% Present</div>
+            <div class="info-item"><strong>Statement Date:</strong> ${new Date().toISOString().split('T')[0]}</div>
           </div>
+        </div>
 
-          <div class="sign-container">
-            <div class="sign-line">Director Aatish Sah</div>
-            <div class="sign-line">Coaching Registrar</div>
-          </div>
+        <h3 style="margin: 12px 0 6px; text-transform: uppercase; font-size: 11px; border-bottom: 2px solid #028A60; padding-bottom: 3px; color: #028A60; letter-spacing: 0.5px; font-weight: bold;">
+          ${reportHeadline}
+        </h3>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Subject</th>
+              <th style="width: 20%;">Exam Type</th>
+              <th style="width: 10%; text-align: center;">Max</th>
+              <th style="width: 10%; text-align: center;">Pass</th>
+              <th style="width: 10%; text-align: center;">Obtained</th>
+              <th style="width: 10%; text-align: center;">Status</th>
+              <th style="width: 15%;">Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cleanSubjectRows}
+          </tbody>
+        </table>
 
-          <div class="footer-info">
-            Dev Narayan Academy &bull; Janakpur-11, Kishori Nagar &bull; Nepal
-          </div>
-        </body>
-      </html>
+        <div class="sign-container">
+          <div class="sign-line">Director Aatish Sah</div>
+          <div class="sign-line">Coaching Registrar</div>
+        </div>
+
+        <div class="footer-info">
+          Dev Narayan Academy &bull; Janakpur-11, Kishori Nagar &bull; Nepal
+        </div>
+      </div>
     `;
 
-    doc.open();
-    doc.write(printHtmlContent);
-    doc.close();
+    printLayout.innerHTML = printHtmlContent;
 
-    // Trigger printing once the iframe has completed writing
+    // Trigger printing once document body has updated
     setTimeout(() => {
       try {
-        if (iframe.contentWindow) {
-          iframe.contentWindow.focus();
-          iframe.contentWindow.print();
-          setPrintStatusText('Print signal dispatched successfully! If the print preview did not launch, try standard keys Ctrl+P (PC) or Cmd+P (Mac).');
-        } else {
-          throw new Error('No contentWindow available');
-        }
+        window.focus();
+        window.print();
+        setPrintStatusText('Print layout compiled successfully! Operating system printer window launched.');
       } catch (printErr) {
-        console.warn('Sandbox blocked direct iframe printing. Directing user to fallback printer options.', printErr);
-        setPrintStatusText('Print operation was blocked by browser frame restrictions. Please copy your marksheet details or click the "Open in New Tab" button in the upper right corner to use the direct browser printing function!');
+        console.warn('Sandbox blocked direct window printing.', printErr);
+        setPrintStatusText('Print status initialized. Press Ctrl+P (PC) or Cmd+P (Mac) to complete printing if the overlay was blocked.');
       }
-    }, 400);
+    }, 150);
   };
 
   // If student session is inactive
