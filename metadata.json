@@ -1,0 +1,6 @@
+{
+  "name": "Dev Narayan Academy (DNA Classes) Portal",
+  "description": "Student result & administrative portal for Dev Narayan Academy (DNA Classes) in Janakpur-11, Kishori Nagar. Features SEE and Class 8-12 tuition management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
