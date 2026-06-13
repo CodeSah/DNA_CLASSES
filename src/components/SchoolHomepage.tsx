@@ -103,8 +103,7 @@ export default function SchoolHomepage({ onNavigate, announcements }: SchoolHome
     <div id="school-homepage-viewport" className="space-y-12">
       
       {/* 1. ADVERTISEMENT SLIDESHOW CAROUSEL */}
-      <div id="school-homepage-carousel" className="relative h-[480px] bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden group">
-        
+      <div id="school-homepage-carousel" className="relative h-[650px] bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden group">
         {/* Carousel image containers */}
         <div className="absolute inset-0 w-full h-full">
           {slides.map((slide, idx) => (
@@ -121,7 +120,7 @@ export default function SchoolHomepage({ onNavigate, announcements }: SchoolHome
                   src={slide.image}
                   alt={slide.title}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover opacity-60 scale-105 transition-transform duration-[12000s]"
+                  className="w-full h-full object-contain opacity-60 transition-transform duration-[12000s]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
               </div>
