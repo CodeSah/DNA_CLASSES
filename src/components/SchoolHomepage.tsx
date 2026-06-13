@@ -17,13 +17,14 @@ import {
   Laptop
 } from 'lucide-react';
 import { Announcement } from '../types';
+import campusImg from "../assets/images/1.png";
+import libraryImg from "../assets/images/2.png";
+import dnaLabImg from "../assets/images/3.png";
+import digitalLearnImg from "../assets/images/4.png";
+import chemistryLabImg from "../assets/images/5.png";
 
 // Slide references using premium education image URLs
-const campusImg = "../src/assets/images/1.png";
-const libraryImg = "../src/assets/images/2.png";
-const dnaLabImg = "../src/assets/images/3.png";
-const digitalLearnImg = "../src/assets/images/4.png";
-const chemistryLabImg = "../src/assets/images/5.png";
+
 
 interface SchoolHomepageProps {
   onNavigate: (tab: 'home' | 'student' | 'teacher') => void;
