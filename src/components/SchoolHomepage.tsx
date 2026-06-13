@@ -19,11 +19,11 @@ import {
 import { Announcement } from '../types';
 
 // Slide references using premium education image URLs
-const campusImg = "../assets/images/1.jpg";
-const libraryImg = "../assets/images/2.jpg";
-const dnaLabImg = "../assets/images/3.jpg";
-const digitalLearnImg = "../assets/images/4.jpg";
-const chemistryLabImg = "../assets/images/5.jpg";
+const campusImg = "../src/assets/images/1.jpg";
+const libraryImg = "../src/assets/images/2.jpg";
+const dnaLabImg = "../src/assets/images/3.jpg";
+const digitalLearnImg = "../src/assets/images/4.jpg";
+const chemistryLabImg = "../src/assets/images/5.jpg";
 
 interface SchoolHomepageProps {
   onNavigate: (tab: 'home' | 'student' | 'teacher') => void;
