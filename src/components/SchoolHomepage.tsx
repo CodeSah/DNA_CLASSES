@@ -103,7 +103,7 @@ export default function SchoolHomepage({ onNavigate, announcements }: SchoolHome
     <div id="school-homepage-viewport" className="space-y-12">
       
       {/* 1. ADVERTISEMENT SLIDESHOW CAROUSEL */}
-      <div id="school-homepage-carousel" className="relative h-[650px] bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden group">
+      <div id="school-homepage-carousel" className="relative h-[550px] bg-[#0A0A0A] border border-[#1A1A1A] overflow-hidden group">
         {/* Carousel image containers */}
         <div className="absolute inset-0 w-full h-full">
           {slides.map((slide, idx) => (
